@@ -26,9 +26,9 @@ import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
 
 import com.guigarage.jgrid.JGrid;
+import com.guigarage.jgrid.demo.util.ImageUtilities;
 import com.guigarage.jgrid.renderer.GridCellRenderer;
 
-import de.jgrid.demo.util.ImageUtilities;
 
 public class PicViewerRenderer extends JComponent implements GridCellRenderer {
 

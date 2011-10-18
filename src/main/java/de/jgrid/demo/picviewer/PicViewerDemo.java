@@ -45,10 +45,10 @@ import com.guigarage.gestures.GestureMagnificationListener;
 import com.guigarage.gestures.GestureUtilities;
 import com.guigarage.gestures.GesturesNotSupportedException;
 import com.guigarage.jgrid.JGrid;
+import com.guigarage.jgrid.demo.util.CoolProgressBarUI;
+import com.guigarage.jgrid.demo.util.ImageUtilities;
+import com.guigarage.jgrid.demo.util.UrlLoader;
 
-import de.jgrid.demo.util.CoolProgressBarUI;
-import de.jgrid.demo.util.ImageUtilities;
-import de.jgrid.demo.util.UrlLoader;
 
 public class PicViewerDemo extends JFrame {
 
