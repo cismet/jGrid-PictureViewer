@@ -33,6 +33,35 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.codehaus.mojo.webstart</groupId>
+				<artifactId>webstart-maven-plugin</artifactId>
+				<version>1.0-beta-2</version>
+				<executions>
+					<execution>
+						<phase>integration-test</phase>
+						<goals>
+							<goal>jnlp</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<libPath>lib</libPath>
+					<jnlp>
+					<outputFile>pictureviewer.jnlp</outputFile>
+						<mainClass>de.jgrid.demo.picviewer.PicViewerDemo</mainClass>
+					</jnlp>
+					<sign>
+						<keystore>${keystore.path}</keystore>
+						<keypass>${keystore.key.password}</keypass>
+						<storepass>${keystore.store.password}</storepass>
+						<alias>guigarage.com</alias>
+						<verify>true</verify>
+					</sign>
+					<makeArchive>false</makeArchive>
+					<verbose>true</verbose>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
