@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * Created on Jan 22, 2011
  *
@@ -14,18 +21,27 @@
  */
 package de.jgrid.demo.picviewer;
 
+import com.guigarage.jgrid.JGrid;
+import com.guigarage.jgrid.demo.util.CoolProgressBarUI;
+import com.guigarage.jgrid.demo.util.ImageUtilities;
+import com.guigarage.jgrid.demo.util.UrlLoader;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import java.io.IOException;
+
 import java.net.URL;
+
 import java.util.Iterator;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -40,191 +56,206 @@ import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.guigarage.jgrid.JGrid;
-import com.guigarage.jgrid.demo.util.CoolProgressBarUI;
-import com.guigarage.jgrid.demo.util.ImageUtilities;
-import com.guigarage.jgrid.demo.util.UrlLoader;
-
-
+/**
+ * DOCUMENT ME!
+ *
+ * @version  $Revision$, $Date$
+ */
 public class PicViewerDemo extends JFrame {
 
-	private static final long serialVersionUID = 1L;
+    //~ Static fields/initializers ---------------------------------------------
 
-	public PicViewerDemo() {
-		setTitle("PictureViewer");
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+    private static final long serialVersionUID = 1L;
 
-		final DefaultListModel model = new DefaultListModel();
+    //~ Constructors -----------------------------------------------------------
 
-		final JFrame loadFrame = new JFrame("Loading Demo");
-		loadFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		final JProgressBar bar = new JProgressBar();
-		bar.setForeground(Color.ORANGE);
-		bar.setUI(new CoolProgressBarUI());
-		loadFrame.getContentPane().setLayout(
-				new FlowLayout(SwingUtilities.CENTER, 20, 20));
-		loadFrame.getContentPane().add(bar);
-		loadFrame.setResizable(false);
-		loadFrame.pack();
-		loadFrame.setLocationRelativeTo(null);
-		loadFrame.setBackground(Color.DARK_GRAY);
-		loadFrame.setVisible(true);
+    /**
+     * Creates a new PicViewerDemo object.
+     */
+    public PicViewerDemo() {
+        setTitle("PictureViewer");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-		final JGrid grid = new JGrid(model);
-		grid.getCellRendererManager().setDefaultRenderer(new PicViewerRenderer());
-		grid.setFixedCellDimension(160);
-		grid.addMouseMotionListener(new MouseAdapter() {
+        final DefaultListModel model = new DefaultListModel();
 
-			int lastIndex = -1;
+        final JFrame loadFrame = new JFrame("Loading Demo");
+        loadFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        final JProgressBar bar = new JProgressBar();
+        bar.setForeground(Color.ORANGE);
+        bar.setUI(new CoolProgressBarUI());
+        loadFrame.getContentPane().setLayout(
+            new FlowLayout(SwingUtilities.CENTER, 20, 20));
+        loadFrame.getContentPane().add(bar);
+        loadFrame.setResizable(false);
+        loadFrame.pack();
+        loadFrame.setLocationRelativeTo(null);
+        loadFrame.setBackground(Color.DARK_GRAY);
+        loadFrame.setVisible(true);
 
-			@Override
-			public void mouseMoved(MouseEvent e) {
-				if (lastIndex >= 0) {
-					Object o = grid.getModel().getElementAt(lastIndex);
-					if (o instanceof PicViewerObject) {
-						Rectangle r = grid.getCellBounds(lastIndex);
-						if (r != null && !r.contains(e.getPoint())) {
-							((PicViewerObject) o).setMarker(false);
-							grid.repaint(r);
-						}
-					}
-				}
+        final JGrid grid = new JGrid(model);
+        grid.getCellRendererManager().setDefaultRenderer(new PicViewerRenderer());
+        grid.setFixedCellDimension(160);
+        grid.addMouseMotionListener(new MouseAdapter() {
 
-				int index = grid.getCellAt(e.getPoint());
-				if (index >= 0) {
-					Object o = grid.getModel().getElementAt(index);
-					if (o instanceof PicViewerObject) {
-						Rectangle r = grid.getCellBounds(index);
-						if (r != null) {
-							((PicViewerObject) o).setFraction(((float) e
-									.getPoint().x - (float) r.x)
-									/ (float) r.width);
-							((PicViewerObject) o).setMarker(true);
-							lastIndex = index;
-							grid.repaint(r);
-						}
-					}
-				}
+                int lastIndex = -1;
 
-			}
-		});
+                @Override
+                public void mouseMoved(final MouseEvent e) {
+                    if (lastIndex >= 0) {
+                        final Object o = grid.getModel().getElementAt(lastIndex);
+                        if (o instanceof PicViewerObject) {
+                            final Rectangle r = grid.getCellBounds(lastIndex);
+                            if ((r != null) && !r.contains(e.getPoint())) {
+                                ((PicViewerObject)o).setMarker(false);
+                                grid.repaint(r);
+                            }
+                        }
+                    }
 
-		JScrollPane scrollPane = new JScrollPane(grid);
-		scrollPane.setBorder(null);
+                    final int index = grid.getCellAt(e.getPoint());
+                    if (index >= 0) {
+                        final Object o = grid.getModel().getElementAt(index);
+                        if (o instanceof PicViewerObject) {
+                            final Rectangle r = grid.getCellBounds(index);
+                            if (r != null) {
+                                ((PicViewerObject)o).setFraction(((float)e.getPoint().x - (float)r.x)
+                                            / (float)r.width);
+                                ((PicViewerObject)o).setMarker(true);
+                                lastIndex = index;
+                                grid.repaint(r);
+                            }
+                        }
+                    }
+                }
+            });
 
-		getContentPane().add(scrollPane, BorderLayout.CENTER);
+        final JScrollPane scrollPane = new JScrollPane(grid);
+        scrollPane.setBorder(null);
 
-		JPanel controlPanel = new JPanel();
-		controlPanel.setLayout(new BorderLayout());
+        getContentPane().add(scrollPane, BorderLayout.CENTER);
 
-		final JSlider slider = new JSlider(64, 512, grid
-				.getFixedCellDimension());
-		slider.setValue(grid.getFixedCellDimension());
-		slider.putClientProperty("JComponent.sizeVariant", "small");
-		slider.addChangeListener(new ChangeListener() {
+        final JPanel controlPanel = new JPanel();
+        controlPanel.setLayout(new BorderLayout());
 
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				grid.setFixedCellDimension(slider.getValue());
-			}
-		});
-		
-		JPanel sliderPanel = new JPanel();
-		sliderPanel.setLayout(new FlowLayout());
-		try {
-			sliderPanel.add(new JLabel(new ImageIcon(ImageIO.read(UrlLoader
-					.getInstance().load(
-							"/de/jgrid/demo/picviewer/dim_small.png")))));
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		sliderPanel.add(slider);
-		try {
-			sliderPanel.add(new JLabel(new ImageIcon(ImageIO.read(UrlLoader
-					.getInstance().load(
-							"/de/jgrid/demo/picviewer/dim_large.png")))));
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		controlPanel.add(sliderPanel, BorderLayout.EAST);
-		getContentPane().add(controlPanel, BorderLayout.SOUTH);
-		getContentPane().setBackground(grid.getBackground());
-		setSize(800, 600);
-		setLocationRelativeTo(null);
+        final JSlider slider = new JSlider(64, 512, grid.getFixedCellDimension());
+        slider.setValue(grid.getFixedCellDimension());
+        slider.putClientProperty("JComponent.sizeVariant", "small");
+        slider.addChangeListener(new ChangeListener() {
 
-		SwingWorker<Void, PicViewerObject> worker = new SwingWorker<Void, PicViewerObject>() {
+                @Override
+                public void stateChanged(final ChangeEvent e) {
+                    grid.setFixedCellDimension(slider.getValue());
+                }
+            });
 
-			@Override
-			protected Void doInBackground() throws Exception {
-				setProgress(0);
-				publish(generateViewObject("beach"));
-				setProgress((int) (100.0f / 6.0f));
-				publish(generateViewObject("desert"));
-				setProgress((int) (100.0f / 6.0f) * 2);
-				publish(generateViewObject("water"));
-				setProgress((int) (100.0f / 6.0f) * 3);
-				publish(generateViewObject("farm"));
-				setProgress((int) (100.0f / 6.0f) * 4);
-				publish(generateViewObject("nature"));
-				setProgress((int) (100.0f / 6.0f) * 5);
-				publish(generateViewObject("travel"));
-				setProgress(100);
-				return null;
-			}
+        final JPanel sliderPanel = new JPanel();
+        sliderPanel.setLayout(new FlowLayout());
+        try {
+            sliderPanel.add(new JLabel(
+                    new ImageIcon(
+                        ImageIO.read(UrlLoader.getInstance().load(
+                                "/de/jgrid/demo/picviewer/dim_small.png")))));
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        sliderPanel.add(slider);
+        try {
+            sliderPanel.add(new JLabel(
+                    new ImageIcon(
+                        ImageIO.read(UrlLoader.getInstance().load(
+                                "/de/jgrid/demo/picviewer/dim_large.png")))));
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        controlPanel.add(sliderPanel, BorderLayout.EAST);
+        getContentPane().add(controlPanel, BorderLayout.SOUTH);
+        getContentPane().setBackground(grid.getBackground());
+        setSize(800, 600);
+        setLocationRelativeTo(null);
 
-			private PicViewerObject generateViewObject(String folder) {
-				PicViewerObject obj = new PicViewerObject();
-				for (int i = 1; i <= 10; i++) {
-					try {
-						obj.addImage(ImageUtilities.createCompatibleImage(ImageIO.read(new URL(
-								"http://guigarage.com/downloads/viewerpics/" + folder + "/"
-										+ i + ".png"))));
-					} catch (Exception exception) {
-						exception.printStackTrace();
-					}
-				}
-				return obj;
-			}
+        final SwingWorker<Void, PicViewerObject> worker = new SwingWorker<Void, PicViewerObject>() {
 
-			@Override
-			protected void process(List<PicViewerObject> chunks) {
-				bar.setValue(getProgress());
-				for (Iterator<PicViewerObject> iterator = chunks.iterator(); iterator
-						.hasNext();) {
-					model.addElement(iterator.next());
-				}
-			}
+                @Override
+                protected Void doInBackground() throws Exception {
+                    setProgress(0);
+                    publish(generateViewObject("beach"));
+                    setProgress((int)(100.0f / 6.0f));
+                    publish(generateViewObject("desert"));
+                    setProgress((int)(100.0f / 6.0f) * 2);
+                    publish(generateViewObject("water"));
+                    setProgress((int)(100.0f / 6.0f) * 3);
+                    publish(generateViewObject("farm"));
+                    setProgress((int)(100.0f / 6.0f) * 4);
+                    publish(generateViewObject("nature"));
+                    setProgress((int)(100.0f / 6.0f) * 5);
+                    publish(generateViewObject("travel"));
+                    setProgress(100);
+                    return null;
+                }
 
-			@Override
-			protected void done() {
-				int size = model.getSize();
-				for (int j = 0; j < 3; j++) {
-					for (int i = 0; i < size; i++) {
-						PicViewerObject o = (PicViewerObject) ((PicViewerObject) model.get(i)).clone();
-						o.setFraction((float) (Math.random()));
-						model.addElement(o);
-					}
-				}
-				loadFrame.setVisible(false);
-				setVisible(true);
-			}
-		};
-		worker.execute();
-	}
+                private PicViewerObject generateViewObject(final String folder) {
+                    final PicViewerObject obj = new PicViewerObject();
+                    for (int i = 1; i <= 10; i++) {
+                        try {
+                            obj.addImage(ImageUtilities.createCompatibleImage(
+                                    ImageIO.read(
+                                        new URL(
+                                            "http://guigarage.com/downloads/viewerpics/"
+                                                    + folder
+                                                    + "/"
+                                                    + i
+                                                    + ".png"))));
+                        } catch (Exception exception) {
+                            exception.printStackTrace();
+                        }
+                    }
+                    return obj;
+                }
 
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                protected void process(final List<PicViewerObject> chunks) {
+                    bar.setValue(getProgress());
+                    for (final Iterator<PicViewerObject> iterator = chunks.iterator(); iterator.hasNext();) {
+                        model.addElement(iterator.next());
+                    }
+                }
 
-			@Override
-			public void run() {
-				try {
-					UIManager.setLookAndFeel(UIManager
-							.getSystemLookAndFeelClassName());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				new PicViewerDemo();
-			}
-		});
-	}
+                @Override
+                protected void done() {
+                    final int size = model.getSize();
+                    for (int j = 0; j < 3; j++) {
+                        for (int i = 0; i < size; i++) {
+                            final PicViewerObject o = (PicViewerObject)((PicViewerObject)model.get(i)).clone();
+                            o.setFraction((float)(Math.random()));
+                            model.addElement(o);
+                        }
+                    }
+                    loadFrame.setVisible(false);
+                    setVisible(true);
+                }
+            };
+        worker.execute();
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  args  DOCUMENT ME!
+     */
+    public static void main(final String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    try {
+                        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    new PicViewerDemo();
+                }
+            });
+    }
 }
