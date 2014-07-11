@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * Created on Jan 22, 2011
  *
@@ -15,66 +22,120 @@
 package de.jgrid.demo.picviewer;
 
 import java.awt.image.BufferedImage;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class PicViewerObject implements Cloneable{
+/**
+ * DOCUMENT ME!
+ *
+ * @version  $Revision$, $Date$
+ */
+public class PicViewerObject implements Cloneable {
 
-	private List<BufferedImage> images;
-	
-	private float fraction;
-	
-	private int index;
-	
-	private boolean marker;
-	
-	public PicViewerObject() {
-		images = new ArrayList<BufferedImage>();
-		setFraction(0.0f);
-	}
-	
-	@Override
-	protected Object clone() {
-		PicViewerObject clone = new PicViewerObject();
-		for(BufferedImage image : images) {
-			clone.addImage(image);
-		}
-		clone.setFraction(getFraction());
-		return clone;
-	}
-	
-	public void addImage(BufferedImage image) {
-		images.add(image);
-		setFraction(getFraction());
-	}
-	
-	public BufferedImage getImage() {
-		return images.get(index);
-	}
-	
-	public void setMarker(boolean marker) {
-		this.marker = marker;
-	}
-	
-	public boolean isMarker() {
-		return marker;
-	}
-	
-	public int getIndex() {
-		return index;
-	}
-	
-	public Object getValueForFraction() {
-		return getImage();
-	}
-	
-	public float getFraction() {
-		return fraction;
-	}
-	
-	public void setFraction(float fraction) {
-		this.fraction = Math.max(0.0f, Math.min(1.0f, fraction));
-		this.index = (int) (this.fraction * (float)(images.size()));
-	}
+    //~ Instance fields --------------------------------------------------------
 
+    private List<BufferedImage> images;
+
+    private float fraction;
+
+    private int index;
+
+    private boolean marker;
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new PicViewerObject object.
+     */
+    public PicViewerObject() {
+        images = new ArrayList<BufferedImage>();
+        setFraction(0.0f);
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    protected Object clone() {
+        final PicViewerObject clone = new PicViewerObject();
+        for (final BufferedImage image : images) {
+            clone.addImage(image);
+        }
+        clone.setFraction(getFraction());
+        return clone;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  image  DOCUMENT ME!
+     */
+    public void addImage(final BufferedImage image) {
+        images.add(image);
+        setFraction(getFraction());
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public BufferedImage getImage() {
+        return images.get(index);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  marker  DOCUMENT ME!
+     */
+    public void setMarker(final boolean marker) {
+        this.marker = marker;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isMarker() {
+        return marker;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getIndex() {
+        return index;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public Object getValueForFraction() {
+        return getImage();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public float getFraction() {
+        return fraction;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  fraction  DOCUMENT ME!
+     */
+    public void setFraction(final float fraction) {
+        this.fraction = Math.max(0.0f, Math.min(1.0f, fraction));
+        this.index = (int)(this.fraction * (float)(images.size()));
+    }
 }

@@ -1,74 +1,70 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+	    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>de.cismet.cids</groupId>
+        <artifactId>cids-parent</artifactId>
+        <version>2.0</version>
+    </parent>
+    
 	<groupId>com.guigarage</groupId>
 	<artifactId>jgrid-pictureviewer</artifactId>
-	<version>0.3-SNAPSHOT</version>
+	<version>0.4-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	<properties>
+        
+        <name>jGrid-PictureViewer</name>
+	<description>A PictureViewer realized with jGrid</description>
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	
+            <prerequisites>
+        <maven>3</maven>
+    </prerequisites>
+    
+        <scm>
+        <connection>https://github.com/cismet/jGrid-PictureViewer.git</connection>
+        <developerConnection>scm:git:git@github.com:cismet/jGrid-PictureViewer.git</developerConnection>
+        <url>https://github.com/cismet/jGrid-PictureViewer</url>
+    </scm>
+    
+        <repositories>
+        <repository>
+            <id>cismet-repo</id>
+            <url>https://repo.cismet.de/repo</url>
+            <releases>
+                <enabled>true</enabled>
+                <checksumPolicy>warn</checksumPolicy>
+                <updatePolicy>daily</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <checksumPolicy>warn</checksumPolicy>
+                <updatePolicy>interval:60</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+        
+        <properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>com.guigarage</groupId>
-			<artifactId>jgrid-demo-utils</artifactId>
-			<version>0.3-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.guigarage</groupId>
-			<artifactId>gestures-wrapper</artifactId>
-			<version>0.3-SNAPSHOT</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.guigarage</groupId>
 			<artifactId>jgrid</artifactId>
-			<version>0.3-SNAPSHOT</version>
+			<version>0.4-SNAPSHOT</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
+        
 	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo.webstart</groupId>
-				<artifactId>webstart-maven-plugin</artifactId>
-				<version>1.0-beta-2</version>
-				<executions>
-					<execution>
-						<phase>integration-test</phase>
-						<goals>
-							<goal>jnlp</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<libPath>lib</libPath>
-					<jnlp>
-					<outputFile>pictureviewer.jnlp</outputFile>
-						<mainClass>de.jgrid.demo.picviewer.PicViewerDemo</mainClass>
-					</jnlp>
-					<sign>
-						<keystore>${keystore.path}</keystore>
-						<keypass>${keystore.key.password}</keypass>
-						<storepass>${keystore.store.password}</storepass>
-						<alias>guigarage.com</alias>
-						<verify>true</verify>
-					</sign>
-					<makeArchive>false</makeArchive>
-					<verbose>true</verbose>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+        <finalName>jgrid-pictureviewer</finalName>
+    </build>
 </project>
