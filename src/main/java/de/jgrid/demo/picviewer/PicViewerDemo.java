@@ -40,10 +40,6 @@ import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.guigarage.gestures.GestureMagnificationEvent;
-import com.guigarage.gestures.GestureMagnificationListener;
-import com.guigarage.gestures.GestureUtilities;
-import com.guigarage.gestures.GesturesNotSupportedException;
 import com.guigarage.jgrid.JGrid;
 import com.guigarage.jgrid.demo.util.CoolProgressBarUI;
 import com.guigarage.jgrid.demo.util.ImageUtilities;
@@ -132,28 +128,6 @@ public class PicViewerDemo extends JFrame {
 				grid.setFixedCellDimension(slider.getValue());
 			}
 		});
-		
-		
-		try {
-			GestureUtilities.registerListener(grid, new GestureMagnificationListener() {
-
-//				double magnification = 1.0f;
-
-				@Override
-				public void magnify(GestureMagnificationEvent gestureMagnificationEvent) {
-					int val = slider.getValue();
-//					magnification = magnification + gestureMagnificationEvent.getMagnification();
-					
-					
-					System.out.println(gestureMagnificationEvent.getMagnification());
-					System.out.println((slider.getMaximum() - slider.getMinimum()) * gestureMagnificationEvent.getMagnification());
-					
-					slider.setValue((int) (val + (slider.getMaximum() - slider.getMinimum()) * gestureMagnificationEvent.getMagnification()));
-				}
-			});
-		} catch (GesturesNotSupportedException e2) {
-			e2.printStackTrace();
-		}
 		
 		JPanel sliderPanel = new JPanel();
 		sliderPanel.setLayout(new FlowLayout());
